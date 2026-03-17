@@ -191,7 +191,7 @@ function FField({ label, k, value, onChange, type="text", options=null, placehol
         </select>
       ) : (
         <input type={type} value={value} onChange={e => onChange(k, e.target.value)} placeholder={placeholder}
-          style={{ background:`${G.forest}90`, border:`1px solid ${G.gold}33`, borderRadius:8, padding:"8px 11px", color:G.parchment, fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none" }} />
+          style={{ background:`${G.forest}90`, border:`1px solid ${G.gold}33`, borderRadius:8, padding:"8px 11px", color:type==="date"&&!value?"transparent":G.parchment, fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none", colorScheme:"dark", cursor:"pointer" }} />
       )}
     </div>
   );
@@ -446,7 +446,7 @@ function TField({ label, k, value, onChange, type="text", options=null, placehol
         </select>
       ) : (
         <input type={type} value={value} onChange={e => onChange(k, e.target.value)} placeholder={placeholder}
-          style={{ background:`${G.forest}90`, border:`1px solid ${G.gold}33`, borderRadius:8, padding:"8px 11px", color:G.parchment, fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none" }} />
+          style={{ background:`${G.forest}90`, border:`1px solid ${G.gold}33`, borderRadius:8, padding:"8px 11px", color:type==="date"&&!value?"transparent":G.parchment, fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none", colorScheme:"dark", cursor:"pointer" }} />
       )}
     </div>
   );
@@ -1236,6 +1236,11 @@ export default function App() {
         ::-webkit-scrollbar-thumb { background: ${G.gold}44; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: ${G.gold}88; }
         select option { background: #0D2219 !important; color: #F5EDD6 !important; }
+        input[type="date"] { cursor: pointer; }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8) sepia(1) saturate(2) hue-rotate(5deg); cursor: pointer; opacity: 0.8; }
+        input[type="date"]::-webkit-inner-spin-button { display: none; }
+        input[type="date"]::-webkit-datetime-edit { color: #F5EDD6; }
+        input[type="date"]::-webkit-datetime-edit-fields-wrapper { color: #F5EDD6; }
         @keyframes loadBar { 0% { width:0%; margin-left:0 } 50% { width:60%; margin-left:20% } 100% { width:0%; margin-left:100% } }
       `}</style>
     </div>
