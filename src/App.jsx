@@ -24,7 +24,7 @@ const G = {
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const STAGES = ["New Enquiry","Sourcing Awaited","Quotation Sent","Documents Review","Sample Under Process","Price Negotiation","Awaiting PO","PO Received","Lost","No Response","Out of Scope","On Hold"];
-const STAGE_COLORS = ["#65676B","#1877F2","#1877F2","#8E44AD","#F5A623","#1877F2"Lt,"#E67E22","#42B72A","#FA3E3E","#7F8C8D","#BDC3C7","#9B59B6"];
+const STAGE_COLORS = ["#65676B","#1877F2","#1877F2","#8E44AD","#F5A623","#E2C47A","#E67E22","#42B72A","#FA3E3E","#7F8C8D","#BDC3C7","#9B59B6"];
 const PRIORITIES = ["High","Medium","Low"];
 const PRIO_COLORS = { High:"#FA3E3E", Medium:"#F5A623", Low:"#42B72A" };
 const SOURCES = ["Email","Phone Call","WhatsApp","Trade Show","LinkedIn","Website","Referral","Walk-in","Other"];
@@ -131,7 +131,7 @@ const SEED_TASKS = [
 
 // ─── REUSABLE UI ──────────────────────────────────────────────────────────────
 function Btn({ label, onClick, variant="primary", size="md", disabled=false }) {
-  const bg = variant==="primary" ? `linear-gradient(135deg,#1877F2,${"#1877F2"Lt})`
+  const bg = variant==="primary" ? `linear-gradient(135deg,#1877F2,${"#E2C47A"})`
            : variant==="danger"  ? "#FA3E3E"
            : "transparent";
   const color = variant==="primary" ? "#1877F2"Dk : variant==="danger" ? "white" : "#1877F2";
@@ -762,7 +762,7 @@ function Dashboard({ enquiries, users, tasks, onTaskAdd, onTaskUpdate, onTaskDel
           <ResponsiveContainer width="100%" height={150}>
             <PieChart>
               <Pie data={assigneeCounts} cx="50%" cy="50%" outerRadius={58} dataKey="count" nameKey="name" paddingAngle={3}>
-                {assigneeCounts.map((_, i) => <Cell key={i} fill={["#1877F2","#42B72A","#1877F2"Lt,"#F5A623","#1877F2","#65676B"][i%6]} />)}
+                {assigneeCounts.map((_, i) => <Cell key={i} fill={["#1877F2","#42B72A","#E2C47A","#F5A623","#1877F2","#65676B"][i%6]} />)}
               </Pie>
               <Tooltip content={<CT />} />
             </PieChart>
@@ -770,7 +770,7 @@ function Dashboard({ enquiries, users, tasks, onTaskAdd, onTaskUpdate, onTaskDel
           <div style={{ display:"flex", flexDirection:"column", gap:3 }}>
             {assigneeCounts.map((a, i) => (
               <div key={a.name} style={{ display:"flex", justifyContent:"space-between", fontFamily:"Raleway,sans-serif", fontSize:10 }}>
-                <span style={{ color:["#1877F2","#42B72A","#1877F2"Lt,"#F5A623","#1877F2","#65676B"][i%6] }}>● {a.name}</span>
+                <span style={{ color:["#1877F2","#42B72A","#E2C47A","#F5A623","#1877F2","#65676B"][i%6] }}>● {a.name}</span>
                 <span style={{ color:"#1c1e21", fontWeight:700 }}>{a.count}</span>
               </div>
             ))}
