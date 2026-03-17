@@ -24,13 +24,13 @@ const G = {
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const STAGES = ["New Enquiry","Sourcing Awaited","Quotation Sent","Documents Review","Sample Under Process","Price Negotiation","Awaiting PO","PO Received","Lost","No Response","Out of Scope","On Hold"];
-const STAGE_COLORS = [G.mist,G.blue,G.gold,"#8E44AD",G.amber,G.goldLt,"#E67E22",G.sage,G.red,"#7F8C8D","#BDC3C7","#9B59B6"];
+const STAGE_COLORS = ["#65676B","#1877F2","#1877F2","#8E44AD","#F5A623","#1877F2"Lt,"#E67E22","#42B72A","#FA3E3E","#7F8C8D","#BDC3C7","#9B59B6"];
 const PRIORITIES = ["High","Medium","Low"];
-const PRIO_COLORS = { High:G.red, Medium:G.amber, Low:G.sage };
+const PRIO_COLORS = { High:"#FA3E3E", Medium:"#F5A623", Low:"#42B72A" };
 const SOURCES = ["Email","Phone Call","WhatsApp","Trade Show","LinkedIn","Website","Referral","Walk-in","Other"];
 const UNITS = ["kg","MT","Litres","Pieces","Boxes","Bags","Other"];
 const TASK_STATUSES = ["Not Started","In Progress","On Hold","Done"];
-const TASK_STATUS_COLORS = {"Not Started":G.mist,"In Progress":G.blue,"On Hold":"#9B59B6","Done":G.sage};
+const TASK_STATUS_COLORS = {"Not Started":"#65676B","In Progress":"#1877F2","On Hold":"#9B59B6","Done":"#42B72A"};
 
 // ─── GOOGLE SHEETS API ────────────────────────────────────────────────────────
 const API = "https://script.google.com/macros/s/AKfycbyTyh_M_vX3jXBLWgZsBMwibi330x0_z5K_C03RwqjMXdzyBYfYqG_aOHvPwIwZkMPs/exec";
@@ -131,14 +131,14 @@ const SEED_TASKS = [
 
 // ─── REUSABLE UI ──────────────────────────────────────────────────────────────
 function Btn({ label, onClick, variant="primary", size="md", disabled=false }) {
-  const bg = variant==="primary" ? `linear-gradient(135deg,${G.gold},${G.goldLt})`
-           : variant==="danger"  ? G.red
+  const bg = variant==="primary" ? `linear-gradient(135deg,#1877F2,${"#1877F2"Lt})`
+           : variant==="danger"  ? "#FA3E3E"
            : "transparent";
-  const color = variant==="primary" ? G.forestDk : variant==="danger" ? "white" : G.gold;
+  const color = variant==="primary" ? "#1877F2"Dk : variant==="danger" ? "white" : "#1877F2";
   const pad = size==="sm" ? "5px 12px" : size==="lg" ? "13px 28px" : "9px 18px";
   return (
     <button onClick={onClick} disabled={disabled} style={{
-      background:bg, color, border:`1px solid ${variant==="ghost"?G.gold+"44":"transparent"}`,
+      background:bg, color, border:`1px solid ${variant==="ghost"?"#1877F2"+"44":"transparent"}`,
       borderRadius:9, padding:pad, cursor:disabled?"not-allowed":"pointer",
       fontFamily:"Raleway,sans-serif", fontSize:size==="sm"?11:13, fontWeight:700,
       opacity:disabled?0.5:1, whiteSpace:"nowrap", letterSpacing:0.3
@@ -148,18 +148,18 @@ function Btn({ label, onClick, variant="primary", size="md", disabled=false }) {
 
 function StageBadge({ stage }) {
   const i = STAGES.indexOf(stage);
-  const c = STAGE_COLORS[i] || G.mist;
+  const c = STAGE_COLORS[i] || "#65676B";
   return <span style={{ background:`${c}22`, color:c, border:`1px solid ${c}44`, borderRadius:20, padding:"3px 11px", fontSize:11, fontWeight:700, fontFamily:"Raleway,sans-serif", whiteSpace:"nowrap" }}>{stage}</span>;
 }
 
 function PrioBadge({ priority }) {
-  const c = PRIO_COLORS[priority] || G.mist;
+  const c = PRIO_COLORS[priority] || "#65676B";
   return <span style={{ background:`${c}22`, color:c, border:`1px solid ${c}44`, borderRadius:20, padding:"3px 10px", fontSize:11, fontWeight:700, fontFamily:"Raleway,sans-serif" }}>{priority}</span>;
 }
 
 function KPI({ label, value, sub, accent, icon }) {
   return (
-    <div style={{ background:"#FFFFFF", border:`1px solid ${accent||G.gold}33`, borderRadius:13, padding:"18px 22px", position:"relative", overflow:"hidden" }}>
+    <div style={{ background:"#FFFFFF", border:`1px solid ${accent||"#1877F2"}33`, borderRadius:13, padding:"18px 22px", position:"relative", overflow:"hidden" }}>
       <div style={{ position:"absolute", top:-8, right:-8, fontSize:44, opacity:0.07 }}>{icon}</div>
       <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, fontWeight:700, letterSpacing:2, color:"#65676B", textTransform:"uppercase", marginBottom:7 }}>{label}</div>
       <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:36, fontWeight:600, color:accent||"#1877F2", lineHeight:1 }}>{value}</div>
@@ -204,7 +204,7 @@ function FField({ label, k, value, onChange, type="text", options=null, placehol
         </select>
       ) : (
         <input type={type} value={value} onChange={e => onChange(k, e.target.value)} placeholder={placeholder}
-          style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:8, padding:"8px 11px", color:type==="date"&&!value?"transparent":G.parchment, fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none", colorScheme:"dark", cursor:"pointer" }} />
+          style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:8, padding:"8px 11px", color:type==="date"&&!value?"transparent":"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none", colorScheme:"dark", cursor:"pointer" }} />
       )}
     </div>
   );
@@ -307,7 +307,7 @@ function EnquiryForm({ onSave, onClose, customers, users, initial=null }) {
           <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, fontWeight:700, letterSpacing:2, color:"#1877F2", textTransform:"uppercase" }}>
             Products Enquired ({form.products.length})
           </div>
-          <button onClick={addProduct} style={{ background:`${G.gold}22`, border:"1px solid #CDD0D4", borderRadius:7, padding:"4px 12px", cursor:"pointer", color:"#1877F2", fontFamily:"Raleway,sans-serif", fontSize:11, fontWeight:700 }}>
+          <button onClick={addProduct} style={{ background:`#1877F222`, border:"1px solid #CDD0D4", borderRadius:7, padding:"4px 12px", cursor:"pointer", color:"#1877F2", fontFamily:"Raleway,sans-serif", fontSize:11, fontWeight:700 }}>
             + Add Product
           </button>
         </div>
@@ -318,7 +318,7 @@ function EnquiryForm({ onSave, onClose, customers, users, initial=null }) {
             ))}
           </div>
           {form.products.map((p, idx) => (
-            <div key={idx} style={{ display:"grid", gridTemplateColumns:"28px 1fr 110px 90px 32px", gap:7, alignItems:"center", background:`${G.forest}30`, borderRadius:9, padding:"9px", border:"1px solid #E4E6EB" }}>
+            <div key={idx} style={{ display:"grid", gridTemplateColumns:"28px 1fr 110px 90px 32px", gap:7, alignItems:"center", background:`#1877F230`, borderRadius:9, padding:"9px", border:"1px solid #E4E6EB" }}>
               <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:15, color:"#1877F2", fontWeight:600, textAlign:"center" }}>{idx+1}</div>
               <input value={p.name} onChange={e => setProduct(idx,"name",e.target.value)}
                 placeholder={idx===0?"e.g. Ashwagandha Extract KSM-66":"Product name…"}
@@ -330,7 +330,7 @@ function EnquiryForm({ onSave, onClose, customers, users, initial=null }) {
                 {UNITS.map(u => <option key={u} value={u} style={{ background:"#F0F2F5" }}>{u}</option>)}
               </select>
               <button onClick={() => removeProduct(idx)} disabled={form.products.length===1}
-                style={{ background:"transparent", border:`1px solid ${G.red}44`, borderRadius:7, width:30, height:30, cursor:form.products.length===1?"not-allowed":"pointer", color:"#FA3E3E", fontSize:15, opacity:form.products.length===1?0.3:1, display:"flex", alignItems:"center", justifyContent:"center" }}>×</button>
+                style={{ background:"transparent", border:`1px solid #FA3E3E44`, borderRadius:7, width:30, height:30, cursor:form.products.length===1?"not-allowed":"pointer", color:"#FA3E3E", fontSize:15, opacity:form.products.length===1?0.3:1, display:"flex", alignItems:"center", justifyContent:"center" }}>×</button>
             </div>
           ))}
           <button onClick={addProduct} style={{ border:"1px dashed #BFD6F6", borderRadius:9, padding:"9px", cursor:"pointer", color:"#1877F2", fontFamily:"Raleway,sans-serif", fontSize:12, background:"transparent", width:"100%", textAlign:"center" }}>
@@ -361,10 +361,10 @@ function EnquiryForm({ onSave, onClose, customers, users, initial=null }) {
         {[["Quotation Sent","Quotation Sent"]].map(([k, label]) => (
           <div key={k} onClick={() => set(k, form[k]==="Yes"?"No":"Yes")}
             style={{ display:"flex", alignItems:"center", gap:9, background:"#F0F2F5", borderRadius:9, padding:"10px 14px", border:`1px solid ${form[k]==="Yes"?"#1877F2":"#CDD0D4"}`, cursor:"pointer" }}>
-            <div style={{ width:16, height:16, borderRadius:4, border:`2px solid ${form[k]==="Yes"?G.gold:G.mist}`, background:form[k]==="Yes"?G.gold:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-              {form[k]==="Yes" && <span style={{ color:"#1877F2"Dk, fontSize:10, fontWeight:900 }}>✓</span>}
+            <div style={{ width:16, height:16, borderRadius:4, border:`2px solid ${form[k]==="Yes"?"#1877F2":"#CDD0D4"}`, background:form[k]==="Yes"?"#1877F2":"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+              {form[k]==="Yes" && <span style={{ color:"#FFFFFF", fontSize:10, fontWeight:900 }}>✓</span>}
             </div>
-            <span style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:form[k]==="Yes"?G.parchment:G.mist }}>{label}</span>
+            <span style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:form[k]==="Yes"?"#1c1e21":"#65676B" }}>{label}</span>
           </div>
         ))}
       </div>
@@ -459,7 +459,7 @@ function TField({ label, k, value, onChange, type="text", options=null, placehol
         </select>
       ) : (
         <input type={type} value={value} onChange={e => onChange(k, e.target.value)} placeholder={placeholder}
-          style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:8, padding:"8px 11px", color:type==="date"&&!value?"transparent":G.parchment, fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none", colorScheme:"dark", cursor:"pointer" }} />
+          style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:8, padding:"8px 11px", color:type==="date"&&!value?"transparent":"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none", colorScheme:"dark", cursor:"pointer" }} />
       )}
     </div>
   );
@@ -562,7 +562,7 @@ function TaskBoard({ tasks, users, onAdd, onUpdate, onDelete }) {
 
         {/* Alerts */}
         {(overdue.length > 0 || dueToday.length > 0) && (
-          <div style={{ padding:"8px 18px", background:`${G.red}08`, borderBottom:`1px solid ${G.red}22`, display:"flex", gap:14 }}>
+          <div style={{ padding:"8px 18px", background:`#FA3E3E08`, borderBottom:`1px solid #FA3E3E22`, display:"flex", gap:14 }}>
             {overdue.length > 0 && <span style={{ fontFamily:"Raleway,sans-serif", fontSize:11, color:"#FA3E3E", fontWeight:700 }}>⚠ {overdue.length} task{overdue.length>1?"s":""} overdue</span>}
             {dueToday.length > 0 && <span style={{ fontFamily:"Raleway,sans-serif", fontSize:11, color:"#F5A623", fontWeight:700 }}>⚡ {dueToday.length} due today</span>}
           </div>
@@ -577,10 +577,10 @@ function TaskBoard({ tasks, users, onAdd, onUpdate, onDelete }) {
             const isOver = t.Status !== "Done" && t["Due Date"] && d < 0;
             const isToday = t.Status !== "Done" && t["Due Date"] && d === 0;
             const isDone = t.Status === "Done";
-            const sc = TASK_STATUS_COLORS[t.Status] || G.mist;
-            const pc = PRIO_COLORS[t.Priority] || G.mist;
+            const sc = TASK_STATUS_COLORS[t.Status] || "#65676B";
+            const pc = PRIO_COLORS[t.Priority] || "#65676B";
             return (
-              <div key={t.ID} style={{ display:"flex", alignItems:"center", gap:11, padding:"10px 18px", background:i%2===0?`${G.forest}15`:"transparent", borderBottom:`1px solid ${G.gold}08` }}>
+              <div key={t.ID} style={{ display:"flex", alignItems:"center", gap:11, padding:"10px 18px", background:i%2===0?`#1877F215`:"transparent", borderBottom:`1px solid #1877F208` }}>
                 {/* Status dot */}
                 <div onClick={() => cycleStatus(t)} title="Click to cycle status"
                   style={{ width:13, height:13, borderRadius:"50%", background:sc, flexShrink:0, cursor:"pointer", boxShadow:`0 0 5px ${sc}77` }} />
@@ -601,7 +601,7 @@ function TaskBoard({ tasks, users, onAdd, onUpdate, onDelete }) {
                 </span>
                 {/* Actions */}
                 <button onClick={() => openEdit(t)} style={{ background:"transparent", border:"1px solid #CDD0D4", borderRadius:6, padding:"3px 9px", cursor:"pointer", color:"#1877F2", fontSize:10, fontFamily:"Raleway,sans-serif" }}>Edit</button>
-                <button onClick={() => onDelete(t.ID)} style={{ background:"transparent", border:`1px solid ${G.red}44`, borderRadius:6, padding:"3px 7px", cursor:"pointer", color:"#FA3E3E", fontSize:10 }}>✕</button>
+                <button onClick={() => onDelete(t.ID)} style={{ background:"transparent", border:`1px solid #FA3E3E44`, borderRadius:6, padding:"3px 7px", cursor:"pointer", color:"#FA3E3E", fontSize:10 }}>✕</button>
               </div>
             );
           })
@@ -620,7 +620,7 @@ function EnquiryDrawer({ enq, onClose, onStageChange, onUpdate, customers, users
   const products = inflateProducts(enq);
 
   return (
-    <div style={{ position:"fixed", top:0, right:0, bottom:0, width:480, background:"#F0F2F5", boxShadow:"-8px 0 40px rgba(0,0,0,0.6)", zIndex:200, overflowY:"auto", borderLeft:`1px solid ${G.gold}33` }}>
+    <div style={{ position:"fixed", top:0, right:0, bottom:0, width:480, background:"#F0F2F5", boxShadow:"-8px 0 40px rgba(0,0,0,0.6)", zIndex:200, overflowY:"auto", borderLeft:`1px solid #1877F233` }}>
       {editing ? (
         <div style={{ padding:24 }}>
           <EnquiryForm onSave={async e => { await onUpdate(e); setEditing(false); }} onClose={() => setEditing(false)} customers={customers} users={users} initial={enq} />
@@ -644,29 +644,29 @@ function EnquiryDrawer({ enq, onClose, onStageChange, onUpdate, customers, users
 
           {/* Alerts */}
           {dRemind !== null && dRemind <= 0 && (
-            <div style={{ background:`${G.red}22`, border:`1px solid ${G.red}44`, borderRadius:9, padding:"9px 14px", marginBottom:10, fontFamily:"Raleway,sans-serif", fontSize:12, color:"#FA3E3E", fontWeight:600 }}>
+            <div style={{ background:`#FA3E3E22`, border:`1px solid #FA3E3E44`, borderRadius:9, padding:"9px 14px", marginBottom:10, fontFamily:"Raleway,sans-serif", fontSize:12, color:"#FA3E3E", fontWeight:600 }}>
               🔔 Reminder overdue by {Math.abs(dRemind)} day{Math.abs(dRemind)!==1?"s":""}
             </div>
           )}
           {dClose !== null && dClose <= 7 && dClose > 0 && (
-            <div style={{ background:`${G.amber}22`, border:`1px solid ${G.amber}44`, borderRadius:9, padding:"9px 14px", marginBottom:10, fontFamily:"Raleway,sans-serif", fontSize:12, color:"#F5A623", fontWeight:600 }}>
+            <div style={{ background:`#F5A62322`, border:`1px solid #F5A62344`, borderRadius:9, padding:"9px 14px", marginBottom:10, fontFamily:"Raleway,sans-serif", fontSize:12, color:"#F5A623", fontWeight:600 }}>
               ⚡ Closes in {dClose} day{dClose!==1?"s":""}
             </div>
           )}
 
           {/* Products */}
-          <div style={{ background:`${G.forest}40`, borderRadius:11, padding:14, border:"1px solid #E4E6EB", marginBottom:12 }}>
+          <div style={{ background:`#1877F240`, borderRadius:11, padding:14, border:"1px solid #E4E6EB", marginBottom:12 }}>
             <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, color:"#1877F2", fontWeight:700, letterSpacing:2, textTransform:"uppercase", marginBottom:9 }}>Products ({products.length})</div>
             {products.map((p, i) => (
-              <div key={i} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"5px 0", borderBottom:i<products.length-1?`1px solid ${G.gold}11`:"none" }}>
+              <div key={i} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"5px 0", borderBottom:i<products.length-1?`1px solid #1877F211`:"none" }}>
                 <div style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:"#1c1e21" }}>
                   <span style={{ color:"#1877F2", fontSize:10, marginRight:7, fontWeight:700 }}>#{i+1}</span>{p.name}
                 </div>
-                {p.qty && <span style={{ fontFamily:"Raleway,sans-serif", fontSize:11, color:"#65676B", background:`${G.forest}60`, borderRadius:6, padding:"2px 9px" }}>{p.qty} {p.unit}</span>}
+                {p.qty && <span style={{ fontFamily:"Raleway,sans-serif", fontSize:11, color:"#65676B", background:`#1877F260`, borderRadius:6, padding:"2px 9px" }}>{p.qty} {p.unit}</span>}
               </div>
             ))}
             {enq["Expected Value"] && (
-              <div style={{ marginTop:9, paddingTop:9, borderTop:`1px solid ${G.gold}22`, fontFamily:"Raleway,sans-serif", fontSize:12 }}>
+              <div style={{ marginTop:9, paddingTop:9, borderTop:`1px solid #1877F222`, fontFamily:"Raleway,sans-serif", fontSize:12 }}>
                 <span style={{ color:"#65676B" }}>Value: </span>
                 <span style={{ color:"#1877F2", fontWeight:700 }}>{enq.Currency} {Number(enq["Expected Value"]).toLocaleString()}</span>
               </div>
@@ -676,7 +676,7 @@ function EnquiryDrawer({ enq, onClose, onStageChange, onUpdate, customers, users
           {/* Details */}
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:9, marginBottom:12 }}>
             {[["Assigned To",enq["Assigned To"]],["Source",enq.Source],["Expected Closure",fmtDate(enq["Expected Closure"])],["Reminder Date",fmtDate(enq["Reminder Date"])],["Quotation Sent",enq["Quotation Sent"]||"No"],["Created By",enq["Created By"]]].map(([k,v])=>(
-              <div key={k} style={{ background:`${G.forest}40`, borderRadius:9, padding:"9px 12px", border:"1px solid #E4E6EB" }}>
+              <div key={k} style={{ background:`#1877F240`, borderRadius:9, padding:"9px 12px", border:"1px solid #E4E6EB" }}>
                 <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, color:"#65676B", fontWeight:700, letterSpacing:1, textTransform:"uppercase", marginBottom:3 }}>{k}</div>
                 <div style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:"#1c1e21" }}>{v||"—"}</div>
               </div>
@@ -684,27 +684,27 @@ function EnquiryDrawer({ enq, onClose, onStageChange, onUpdate, customers, users
           </div>
 
           {enq["Customer Response"] && (
-            <div style={{ background:`${G.forest}40`, borderRadius:11, padding:12, border:"1px solid #E4E6EB", marginBottom:10 }}>
+            <div style={{ background:`#1877F240`, borderRadius:11, padding:12, border:"1px solid #E4E6EB", marginBottom:10 }}>
               <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, color:"#65676B", fontWeight:700, letterSpacing:1, textTransform:"uppercase", marginBottom:5 }}>Customer Response</div>
               <div style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:"#444950", lineHeight:1.6 }}>{enq["Customer Response"]}</div>
             </div>
           )}
           {enq.Notes && (
-            <div style={{ background:`${G.forest}40`, borderRadius:11, padding:12, border:"1px solid #E4E6EB", marginBottom:14 }}>
+            <div style={{ background:`#1877F240`, borderRadius:11, padding:12, border:"1px solid #E4E6EB", marginBottom:14 }}>
               <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, color:"#65676B", fontWeight:700, letterSpacing:1, textTransform:"uppercase", marginBottom:5 }}>Notes</div>
               <div style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:"#444950", lineHeight:1.6 }}>{enq.Notes}</div>
             </div>
           )}
 
           {/* Stage updater */}
-          <div style={{ borderTop:`1px solid ${G.gold}22`, paddingTop:14 }}>
+          <div style={{ borderTop:`1px solid #1877F222`, paddingTop:14 }}>
             <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, color:"#65676B", fontWeight:700, letterSpacing:2, textTransform:"uppercase", marginBottom:9 }}>Update Stage</div>
             <div style={{ display:"flex", flexWrap:"wrap", gap:5 }}>
               {STAGES.map((s, i) => (
                 <button key={s} onClick={() => onStageChange(enq.ID, s)} style={{
                   background: enq.Stage===s ? `${STAGE_COLORS[i]}33` : "transparent",
-                  color: enq.Stage===s ? STAGE_COLORS[i] : G.mist,
-                  border: `1px solid ${enq.Stage===s ? STAGE_COLORS[i]+"66" : G.mist+"33"}`,
+                  color: enq.Stage===s ? STAGE_COLORS[i] : "#65676B",
+                  border: `1px solid ${enq.Stage===s ? STAGE_COLORS[i]+"66" : "#65676B"+"33"}`,
                   borderRadius:20, padding:"4px 12px", cursor:"pointer", fontFamily:"Raleway,sans-serif", fontSize:11, fontWeight:enq.Stage===s?700:400
                 }}>{s}</button>
               ))}
@@ -738,9 +738,9 @@ function Dashboard({ enquiries, users, tasks, onTaskAdd, onTaskUpdate, onTaskDel
       {/* KPIs */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:14 }}>
         <KPI label="Total Enquiries" value={enquiries.length} sub={`${active.length} active`} icon="📋" />
-        <KPI label="Pipeline Value" value={`$${Math.round(totalVal/1000)}K`} sub="Excl. lost" accent={G.gold} icon="💰" />
-        <KPI label="PO Received" value={poReceived} sub="Orders confirmed" accent={G.sage} icon="✓" />
-        <KPI label="Overdue Follow-ups" value={overdueEnq.length} sub={`${closingSoon.length} closing this week`} accent={overdueEnq.length>0?G.red:G.sage} icon="🔔" />
+        <KPI label="Pipeline Value" value={`$${Math.round(totalVal/1000)}K`} sub="Excl. lost" accent={"#1877F2"} icon="💰" />
+        <KPI label="PO Received" value={poReceived} sub="Orders confirmed" accent={"#42B72A"} icon="✓" />
+        <KPI label="Overdue Follow-ups" value={overdueEnq.length} sub={`${closingSoon.length} closing this week`} accent={overdueEnq.length>0?"#FA3E3E":"#42B72A"} icon="🔔" />
       </div>
 
       {/* Charts */}
@@ -749,9 +749,9 @@ function Dashboard({ enquiries, users, tasks, onTaskAdd, onTaskUpdate, onTaskDel
           <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, fontWeight:700, letterSpacing:2, color:"#1877F2", textTransform:"uppercase", marginBottom:14 }}>Pipeline by Stage</div>
           <ResponsiveContainer width="100%" height={170}>
             <BarChart data={stageCounts} margin={{ top:4, right:8, bottom:4, left:-22 }}>
-              <CartesianGrid stroke={`${G.forest}80`} strokeDasharray="3 3" />
-              <XAxis dataKey="stage" tick={{ fill:G.mist, fontSize:9, fontFamily:"Raleway,sans-serif" }} />
-              <YAxis tick={{ fill:G.mist, fontSize:9 }} />
+              <CartesianGrid stroke={`#1877F280`} strokeDasharray="3 3" />
+              <XAxis dataKey="stage" tick={{ fill:"#65676B", fontSize:9, fontFamily:"Raleway,sans-serif" }} />
+              <YAxis tick={{ fill:"#65676B", fontSize:9 }} />
               <Tooltip content={<CT />} />
               <Bar dataKey="count" radius={[4,4,0,0]}>{stageCounts.map((s,i) => <Cell key={i} fill={s.color} />)}</Bar>
             </BarChart>
@@ -762,7 +762,7 @@ function Dashboard({ enquiries, users, tasks, onTaskAdd, onTaskUpdate, onTaskDel
           <ResponsiveContainer width="100%" height={150}>
             <PieChart>
               <Pie data={assigneeCounts} cx="50%" cy="50%" outerRadius={58} dataKey="count" nameKey="name" paddingAngle={3}>
-                {assigneeCounts.map((_, i) => <Cell key={i} fill={[G.gold,G.sage,G.goldLt,G.amber,G.blue,G.mist][i%6]} />)}
+                {assigneeCounts.map((_, i) => <Cell key={i} fill={["#1877F2","#42B72A","#1877F2"Lt,"#F5A623","#1877F2","#65676B"][i%6]} />)}
               </Pie>
               <Tooltip content={<CT />} />
             </PieChart>
@@ -770,7 +770,7 @@ function Dashboard({ enquiries, users, tasks, onTaskAdd, onTaskUpdate, onTaskDel
           <div style={{ display:"flex", flexDirection:"column", gap:3 }}>
             {assigneeCounts.map((a, i) => (
               <div key={a.name} style={{ display:"flex", justifyContent:"space-between", fontFamily:"Raleway,sans-serif", fontSize:10 }}>
-                <span style={{ color:[G.gold,G.sage,G.goldLt,G.amber,G.blue,G.mist][i%6] }}>● {a.name}</span>
+                <span style={{ color:["#1877F2","#42B72A","#1877F2"Lt,"#F5A623","#1877F2","#65676B"][i%6] }}>● {a.name}</span>
                 <span style={{ color:"#1c1e21", fontWeight:700 }}>{a.count}</span>
               </div>
             ))}
@@ -780,10 +780,10 @@ function Dashboard({ enquiries, users, tasks, onTaskAdd, onTaskUpdate, onTaskDel
 
       {/* Overdue enquiries */}
       {overdueEnq.length > 0 && (
-        <Card style={{ padding:18, border:`1px solid ${G.red}33` }}>
+        <Card style={{ padding:18, border:`1px solid #FA3E3E33` }}>
           <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, fontWeight:700, letterSpacing:2, color:"#FA3E3E", textTransform:"uppercase", marginBottom:12 }}>🔔 Overdue Follow-ups ({overdueEnq.length})</div>
           {overdueEnq.map(e => (
-            <div key={e.ID} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:`${G.red}0A`, borderRadius:9, padding:"9px 14px", border:`1px solid ${G.red}22`, marginBottom:7 }}>
+            <div key={e.ID} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:`#FA3E3E0A`, borderRadius:9, padding:"9px 14px", border:`1px solid #FA3E3E22`, marginBottom:7 }}>
               <div>
                 <div style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:"#1c1e21", fontWeight:600 }}>{e["Customer Name"]}</div>
                 <div style={{ fontFamily:"Raleway,sans-serif", fontSize:11, color:"#65676B" }}>{e["Product 1"]} · {e["Assigned To"]}</div>
@@ -799,10 +799,10 @@ function Dashboard({ enquiries, users, tasks, onTaskAdd, onTaskUpdate, onTaskDel
 
       {/* Closing soon */}
       {closingSoon.length > 0 && (
-        <Card style={{ padding:18, border:`1px solid ${G.amber}33` }}>
+        <Card style={{ padding:18, border:`1px solid #F5A62333` }}>
           <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, fontWeight:700, letterSpacing:2, color:"#F5A623", textTransform:"uppercase", marginBottom:12 }}>⚡ Closing This Week ({closingSoon.length})</div>
           {closingSoon.map(e => (
-            <div key={e.ID} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:`${G.amber}0A`, borderRadius:9, padding:"9px 14px", border:`1px solid ${G.amber}22`, marginBottom:7 }}>
+            <div key={e.ID} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:`#F5A6230A`, borderRadius:9, padding:"9px 14px", border:`1px solid #F5A62322`, marginBottom:7 }}>
               <div>
                 <div style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:"#1c1e21", fontWeight:600 }}>{e["Customer Name"]}</div>
                 <div style={{ fontFamily:"Raleway,sans-serif", fontSize:11, color:"#65676B" }}>{e["Product 1"]} · {e["Assigned To"]}</div>
@@ -857,7 +857,7 @@ function EnquiriesTab({ enquiries, customers, users, onSelect, onStageChange, on
           </div>
           <Btn label="+ New Enquiry" onClick={() => setShowForm(true)} size="sm" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search…"
-            style={{ marginLeft:"auto", background:`${G.forest}60`, border:"1px solid #CDD0D4", borderRadius:7, padding:"6px 12px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:12, outline:"none", width:170 }} />
+            style={{ marginLeft:"auto", background:`#1877F260`, border:"1px solid #CDD0D4", borderRadius:7, padding:"6px 12px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:12, outline:"none", width:170 }} />
           <select value={filterStage} onChange={e => setFilterStage(e.target.value)}
             style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:7, padding:"6px 10px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:11 }}>
             <option value="">All Stages</option>
@@ -891,9 +891,9 @@ function EnquiriesTab({ enquiries, customers, users, onSelect, onStageChange, on
                 const closeS = dC!==null&&dC<=7&&dC>=0&&!["PO Received","Lost"].includes(e.Stage);
                 return (
                   <tr key={e.ID} onClick={() => onSelect(e)}
-                    style={{ background:overR?`${G.red}08`:closeS?`${G.amber}08`:i%2===0?`${G.forest}18`:"transparent", cursor:"pointer", transition:"background 0.12s" }}
-                    onMouseEnter={ev => ev.currentTarget.style.background=`${G.gold}0D`}
-                    onMouseLeave={ev => ev.currentTarget.style.background=overR?`${G.red}08`:closeS?`${G.amber}08`:i%2===0?`${G.forest}18`:"transparent"}>
+                    style={{ background:overR?`#FA3E3E08`:closeS?`#F5A62308`:i%2===0?`#1877F218`:"transparent", cursor:"pointer", transition:"background 0.12s" }}
+                    onMouseEnter={ev => ev.currentTarget.style.background=`#1877F20D`}
+                    onMouseLeave={ev => ev.currentTarget.style.background=overR?`#FA3E3E08`:closeS?`#F5A62308`:i%2===0?`#1877F218`:"transparent"}>
                     <td style={{ padding:"9px 13px", color:"#1c1e21", fontWeight:600, maxWidth:130, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{e["Customer Name"]}</td>
                     <td style={{ padding:"9px 13px", color:"#444950", maxWidth:150, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{e["Product 1"]}{e["Product 2"]?`, ${e["Product 2"]}`:""}</td>
                     <td style={{ padding:"9px 13px", color:"#65676B" }}>{e.Country||"—"}</td>
@@ -901,7 +901,7 @@ function EnquiriesTab({ enquiries, customers, users, onSelect, onStageChange, on
                     <td style={{ padding:"9px 13px" }}><PrioBadge priority={e.Priority} /></td>
                     <td style={{ padding:"9px 13px" }} onClick={ev => ev.stopPropagation()}>
                       <select value={e.Stage} onChange={ev => onStageChange(e.ID, ev.target.value)}
-                        style={{ background:"transparent", border:"none", cursor:"pointer", fontFamily:"Raleway,sans-serif", fontSize:11, color:STAGE_COLORS[STAGES.indexOf(e.Stage)]||G.mist, padding:0 }}>
+                        style={{ background:"transparent", border:"none", cursor:"pointer", fontFamily:"Raleway,sans-serif", fontSize:11, color:STAGE_COLORS[STAGES.indexOf(e.Stage)]||"#65676B", padding:0 }}>
                         {STAGES.map(s => <option key={s} value={s} style={{ background:"#F0F2F5", color:"#1c1e21" }}>{s}</option>)}
                       </select>
                     </td>
@@ -909,7 +909,7 @@ function EnquiriesTab({ enquiries, customers, users, onSelect, onStageChange, on
                     <td style={{ padding:"9px 13px", color:closeS?"#F5A623":"#65676B", fontWeight:closeS?700:400 }}>{fmtDate(e["Expected Closure"])}</td>
                     <td style={{ padding:"9px 13px", color:overR?"#FA3E3E":"#65676B", fontWeight:overR?700:400 }}>{overR?`⚠ ${Math.abs(dR)}d overdue`:fmtDate(e["Reminder Date"])}</td>
                     <td style={{ padding:"9px 13px" }} onClick={ev => ev.stopPropagation()}>
-                      <button onClick={() => onDelete(e.ID)} style={{ background:"transparent", border:`1px solid ${G.red}44`, borderRadius:5, padding:"3px 7px", cursor:"pointer", color:"#FA3E3E", fontSize:10 }}>✕</button>
+                      <button onClick={() => onDelete(e.ID)} style={{ background:"transparent", border:`1px solid #FA3E3E44`, borderRadius:5, padding:"3px 7px", cursor:"pointer", color:"#FA3E3E", fontSize:10 }}>✕</button>
                     </td>
                   </tr>
                 );
@@ -936,18 +936,18 @@ function RemindersTab({ enquiries, onSelect }) {
     const d = daysUntil(e["Reminder Date"]);
     return (
       <div onClick={() => onSelect(e)}
-        style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:over?"#FFF0F0":"#F0F2F5", borderRadius:10, padding:"12px 16px", border:`1px solid ${over?G.red+"33":G.gold+"22"}`, cursor:"pointer", marginBottom:7, transition:"background 0.12s" }}
-        onMouseEnter={ev => ev.currentTarget.style.background=`${G.gold}0D`}
-        onMouseLeave={ev => ev.currentTarget.style.background=over?`${G.red}0A`:`${G.forest}28`}>
+        style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:over?"#FFF0F0":"#F0F2F5", borderRadius:10, padding:"12px 16px", border:`1px solid ${over?"#FA3E3E"+"33":"#1877F2"+"22"}`, cursor:"pointer", marginBottom:7, transition:"background 0.12s" }}
+        onMouseEnter={ev => ev.currentTarget.style.background=`#1877F20D`}
+        onMouseLeave={ev => ev.currentTarget.style.background=over?`#FA3E3E0A`:`#1877F228`}>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-          <div style={{ width:38, height:38, borderRadius:"50%", background:over?`${G.red}22`:`${G.gold}22`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16, flexShrink:0 }}>{over?"⚠":"🔔"}</div>
+          <div style={{ width:38, height:38, borderRadius:"50%", background:over?`#FA3E3E22`:`#1877F222`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16, flexShrink:0 }}>{over?"⚠":"🔔"}</div>
           <div>
             <div style={{ fontFamily:"Raleway,sans-serif", fontSize:13, color:"#1c1e21", fontWeight:600 }}>{e["Customer Name"]}</div>
             <div style={{ fontFamily:"Raleway,sans-serif", fontSize:11, color:"#65676B" }}>{e["Product 1"]} · {e["Assigned To"]}</div>
           </div>
         </div>
         <div style={{ textAlign:"right" }}>
-          <div style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:over?G.red:G.amber, fontWeight:700 }}>
+          <div style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:over?"#FA3E3E":"#F5A623", fontWeight:700 }}>
             {over ? `${Math.abs(d)}d overdue` : `In ${d} day${d!==1?"s":""}`}
           </div>
           <div style={{ marginTop:4 }}><StageBadge stage={e.Stage} /></div>
@@ -959,7 +959,7 @@ function RemindersTab({ enquiries, onSelect }) {
   return (
     <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
       {overdue.length > 0 && (
-        <Card style={{ padding:18, border:`1px solid ${G.red}33` }}>
+        <Card style={{ padding:18, border:`1px solid #FA3E3E33` }}>
           <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, fontWeight:700, letterSpacing:2, color:"#FA3E3E", textTransform:"uppercase", marginBottom:12 }}>⚠ Overdue ({overdue.length})</div>
           {overdue.map(e => <Row key={e.ID} e={e} over={true} />)}
         </Card>
@@ -990,7 +990,7 @@ function CustomersTab({ customers, onAdd, onUpdate, onDelete }) {
         <div style={{ padding:"14px 18px", display:"flex", gap:10, alignItems:"center", borderBottom:"1px solid #E4E6EB" }}>
           <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:19, fontWeight:600, color:"#1c1e21" }}>Customers <span style={{ fontFamily:"Raleway,sans-serif", fontSize:12, color:"#1877F2", fontWeight:400 }}>{customers.length} companies</span></div>
           <Btn label="+ Add Customer" onClick={() => setModal({ type:"add" })} size="sm" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search…" style={{ marginLeft:"auto", background:`${G.forest}60`, border:"1px solid #CDD0D4", borderRadius:7, padding:"6px 12px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:12, outline:"none", width:200 }} />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search…" style={{ marginLeft:"auto", background:`#1877F260`, border:"1px solid #CDD0D4", borderRadius:7, padding:"6px 12px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:12, outline:"none", width:200 }} />
         </div>
         <div style={{ overflowX:"auto", maxHeight:500, overflowY:"auto" }}>
           <table style={{ width:"100%", borderCollapse:"collapse", fontFamily:"Raleway,sans-serif", fontSize:12 }}>
@@ -1001,7 +1001,7 @@ function CustomersTab({ customers, onAdd, onUpdate, onDelete }) {
             </thead>
             <tbody>
               {filtered.map((c, i) => (
-                <tr key={c.ID} style={{ background:i%2===0?`${G.forest}18`:"transparent" }}>
+                <tr key={c.ID} style={{ background:i%2===0?`#1877F218`:"transparent" }}>
                   <td style={{ padding:"9px 14px", color:"#1c1e21", fontWeight:600 }}>{c.Company}</td>
                   <td style={{ padding:"9px 14px", color:"#65676B" }}>{c.Country||"—"}</td>
                   <td style={{ padding:"9px 14px", color:"#444950" }}>{c.Contact||"—"}</td>
@@ -1046,7 +1046,7 @@ function UsersTab({ users, onAdd, onUpdate, onDelete }) {
               <div style={{ width:42, height:42, borderRadius:"50%", background:"#1877F2", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"Arial,sans-serif", fontSize:19, fontWeight:700, color:"white" }}>
                 {u.Name.charAt(0)}
               </div>
-              <span style={{ background:u.Active==="Yes"?"#E6F4EA":"#F0F2F5", color:u.Active==="Yes"?"#42B72A":"#65676B", border:`1px solid ${u.Active==="Yes"?G.sage:G.mist}44`, borderRadius:20, padding:"2px 10px", fontSize:10, fontFamily:"Raleway,sans-serif", fontWeight:700 }}>
+              <span style={{ background:u.Active==="Yes"?"#E6F4EA":"#F0F2F5", color:u.Active==="Yes"?"#42B72A":"#65676B", border:`1px solid ${u.Active==="Yes"?"#42B72A":"#65676B"}44`, borderRadius:20, padding:"2px 10px", fontSize:10, fontFamily:"Raleway,sans-serif", fontWeight:700 }}>
                 {u.Active==="Yes"?"Active":"Inactive"}
               </span>
             </div>
@@ -1186,7 +1186,7 @@ export default function App() {
           <div style={{ fontFamily:"Raleway,sans-serif", fontSize:9, color:"rgba(255,255,255,0.65)", letterSpacing:3, textTransform:"uppercase", marginTop:6 }}>Enquiry CRM</div>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginTop:10 }}>
             <div style={{ display:"flex", alignItems:"center", gap:5 }}>
-              <div style={{ width:6, height:6, borderRadius:"50%", background:loading?G.amber:G.sage, boxShadow:`0 0 5px ${loading?G.amber:G.sage}` }} />
+              <div style={{ width:6, height:6, borderRadius:"50%", background:loading?"#F5A623":"#42B72A", boxShadow:`0 0 5px ${loading?"#F5A623":"#42B72A"}` }} />
               <span style={{ fontFamily:"Raleway,sans-serif", fontSize:10, color:"#65676B" }}>{loading?"Loading…":"Sheets Live"}</span>
             </div>
             <button onClick={handleRefresh} title="Refresh from Sheets" style={{ background:"transparent", border:"1px solid #CDD0D4", borderRadius:6, padding:"2px 8px", cursor:"pointer", color:"#1877F2", fontSize:11, fontFamily:"Raleway,sans-serif" }}>↻</button>
@@ -1204,11 +1204,11 @@ export default function App() {
         </nav>
 
         {/* Quick stats */}
-        <div style={{ padding:"12px 15px", borderTop:`1px solid ${G.gold}22` }}>
+        <div style={{ padding:"12px 15px", borderTop:`1px solid #1877F222` }}>
           {[
-            ["Enquiries", enquiries.length, G.gold],
-            ["Active", enquiries.filter(e => !["PO Received","Lost","No Response","Out of Scope"].includes(e.Stage)).length, G.sage],
-            ["Overdue", overdueReminderCount, overdueReminderCount>0?G.red:G.mist],
+            ["Enquiries", enquiries.length, "#1877F2"],
+            ["Active", enquiries.filter(e => !["PO Received","Lost","No Response","Out of Scope"].includes(e.Stage)).length, "#42B72A"],
+            ["Overdue", overdueReminderCount, overdueReminderCount>0?"#FA3E3E":"#65676B"],
           ].map(([l, v, c]) => (
             <div key={l} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:7 }}>
               <span style={{ fontFamily:"Raleway,sans-serif", fontSize:10, color:"#65676B" }}>{l}</span>
