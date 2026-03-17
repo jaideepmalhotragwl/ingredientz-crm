@@ -131,10 +131,10 @@ const SEED_TASKS = [
 
 // ─── REUSABLE UI ──────────────────────────────────────────────────────────────
 function Btn({ label, onClick, variant="primary", size="md", disabled=false }) {
-  const bg = variant==="primary" ? `linear-gradient(135deg,#1877F2,${"#E2C47A"})`
+  const bg = variant==="primary" ? "linear-gradient(135deg,#1877F2,#4196E8)"
            : variant==="danger"  ? "#FA3E3E"
            : "transparent";
-  const color = variant==="primary" ? "#1877F2"Dk : variant==="danger" ? "white" : "#1877F2";
+  const color = variant==="primary" ? "#1877F2" : variant==="danger" ? "white" : "#1877F2";
   const pad = size==="sm" ? "5px 12px" : size==="lg" ? "13px 28px" : "9px 18px";
   return (
     <button onClick={onClick} disabled={disabled} style={{
@@ -322,11 +322,11 @@ function EnquiryForm({ onSave, onClose, customers, users, initial=null }) {
               <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:15, color:"#1877F2", fontWeight:600, textAlign:"center" }}>{idx+1}</div>
               <input value={p.name} onChange={e => setProduct(idx,"name",e.target.value)}
                 placeholder={idx===0?"e.g. Ashwagandha Extract KSM-66":"Product name…"}
-                style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:7, padding:"7px 10px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none", background:"#F0F2F5" }} />
+                style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:7, padding:"7px 10px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none" }} />
               <input value={p.qty} onChange={e => setProduct(idx,"qty",e.target.value)} placeholder="500"
-                style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:7, padding:"7px 10px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none", background:"#F0F2F5" }} />
+                style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:7, padding:"7px 10px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none" }} />
               <select value={p.unit} onChange={e => setProduct(idx,"unit",e.target.value)}
-                style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:7, padding:"7px 8px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none", background:"#F0F2F5" }}>
+                style={{ background:"#F0F2F5", border:"1px solid #CDD0D4", borderRadius:7, padding:"7px 8px", color:"#1c1e21", fontFamily:"Raleway,sans-serif", fontSize:13, outline:"none" }}>
                 {UNITS.map(u => <option key={u} value={u} style={{ background:"#F0F2F5" }}>{u}</option>)}
               </select>
               <button onClick={() => removeProduct(idx)} disabled={form.products.length===1}
