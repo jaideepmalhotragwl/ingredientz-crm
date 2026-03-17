@@ -20,7 +20,7 @@ const TASK_STATUSES = ["Not Started","In Progress","On Hold","Done"];
 const TASK_STATUS_COLORS = {"Not Started":G.mist,"In Progress":G.blue,"On Hold":"#9B59B6","Done":G.sage};
 
 // ─── GOOGLE SHEETS API ────────────────────────────────────────────────────────
-const API = "https://script.google.com/macros/s/AKfycbyoPh_NPwN9762r1eH5Ya1CHwk3nDLtQjxEHcrxCohcj872HZWx4vuo0AVFyjleZgVd/exec";
+const API = "https://script.google.com/macros/s/AKfycbxWULv8zwTSjHCmicM8e6HzerK-TPcnbaLCSfT8i-RRhhTXny4VdPchiBtXLSOrKPEo/exec";
 
 async function sheetGet(sheet) {
   try {
@@ -36,9 +36,9 @@ async function sheetAdd(sheet, rows) {
   } catch(e) {}
 }
 
-async function sheetUpdate(sheet, id, updates) {
+async function sheetUpdate(sheet, id, updates, extra) {
   try {
-    await fetch(API, { method:"POST", body: JSON.stringify({ action:"update", sheet, id, updates }) });
+    await fetch(API, { method:"POST", body: JSON.stringify({ action:"update", sheet, id, updates, ...(extra||{}) }) });
   } catch(e) {}
 }
 
@@ -1103,12 +1103,12 @@ export default function App() {
   async function stageChange(id, stage) {
     setEnquiries(p => p.map(e => e.ID===id ? { ...e, Stage:stage } : e));
     if (selectedEnq?.ID === id) setSelectedEnq(s => s ? { ...s, Stage:stage } : s);
-    await sheetUpdate("Enquiries", id, { Stage: stage });
+    await sheetUpdate("Enquiries", id, { Stage: stage }, { assignedTo: enquiries.find(e => e.ID===id)?.["Assigned To"] || "" });
   }
 
   // ── Task ops ──
   async function addTask(row)    { setTasks(p => [...p, row]);                       await sheetAdd("Tasks", [row]); }
-  async function updateTask(row) { setTasks(p => p.map(t => t.ID===row.ID?row:t));   await sheetUpdate("Tasks", row.ID, row); }
+  async function updateTask(row) { setTasks(p => p.map(t => t.ID===row.ID?row:t));   await sheetUpdate("Tasks", row.ID, row, { owner: row.Owner || "" }); }
   async function deleteTask(id)  { setTasks(p => p.filter(t => t.ID !== id));         await sheetDelete("Tasks", id); }
 
   // ── Customer ops ──
