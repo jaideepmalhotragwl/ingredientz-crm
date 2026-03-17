@@ -20,7 +20,7 @@ const TASK_STATUSES = ["Not Started","In Progress","On Hold","Done"];
 const TASK_STATUS_COLORS = {"Not Started":G.mist,"In Progress":G.blue,"On Hold":"#9B59B6","Done":G.sage};
 
 // ─── GOOGLE SHEETS API ────────────────────────────────────────────────────────
-const API = "https://script.google.com/macros/s/AKfycbxWULv8zwTSjHCmicM8e6HzerK-TPcnbaLCSfT8i-RRhhTXny4VdPchiBtXLSOrKPEo/exec";
+const API = "https://script.google.com/macros/s/AKfycbyTyh_M_vX3jXBLWgZsBMwibi330x0_z5K_C03RwqjMXdzyBYfYqG_aOHvPwIwZkMPs/exec";
 
 async function sheetGet(sheet) {
   try {
