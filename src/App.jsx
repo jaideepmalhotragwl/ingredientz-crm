@@ -167,7 +167,7 @@ const EMPTY_ENQ = {
   "Expected Value":"",Currency:"USD",
   Source:"","Assigned To":"",Priority:"Medium",Stage:"New Enquiry",
   "Expected Closure":"","Reminder Amount":"2","Reminder Unit":"days",
-  "Quotation Sent":"No","Customer Response":"","Purchase Order":"",Notes:"",
+  "Enquiry Date":new Date().toISOString().split("T")[0],"Quotation Sent":"No","Customer Response":"","Purchase Order":"",Notes:"",
 };
 
 function EnquiryForm({onSave,onClose,customers,users,initial=null}) {
@@ -237,6 +237,7 @@ function EnquiryForm({onSave,onClose,customers,users,initial=null}) {
       <FF label="Currency" k="Currency" value={form.Currency} onChange={set} options={["USD","EUR","GBP","INR","AED"]}/>
       <FF label="Stage" k="Stage" value={form.Stage} onChange={set} options={STAGES}/>
       <FF label="Priority" k="Priority" value={form.Priority} onChange={set} options={PRIORITIES}/>
+      <FF label="Date of Enquiry *" k="Enquiry Date" value={form["Enquiry Date"]} onChange={set} type="date"/>
       <FF label="Expected Closure" k="Expected Closure" value={form["Expected Closure"]} onChange={set} type="date"/>
       <FF label="Remind After" k="Reminder Amount" value={form["Reminder Amount"]} onChange={set} placeholder="e.g. 2"/>
       <FF label="Remind Unit" k="Reminder Unit" value={form["Reminder Unit"]} onChange={set} options={["hours","days","weeks"]}/>
@@ -444,7 +445,7 @@ function EnquiryDrawer({enq,onClose,onStageChange,onUpdate,customers,users}){
         </div>}
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:12}}>
-        {[["Assigned To",enq["Assigned To"]],["Source",enq.Source],["Closure",fmtDate(enq["Expected Closure"])],["Reminder",fmtDate(enq["Reminder Date"])],["Quotation",enq["Quotation Sent"]||"No"],["Created By",enq["Created By"]]].map(([k,v])=>
+        {[["Date Received",fmtDate(enq["Enquiry Date"])],["Assigned To",enq["Assigned To"]],["Source",enq.Source],["Closure",fmtDate(enq["Expected Closure"])],["Reminder",fmtDate(enq["Reminder Date"])],["Quotation",enq["Quotation Sent"]||"No"],["Created By",enq["Created By"]]].map(([k,v])=>
           <div key={k} style={{background:C.bg,borderRadius:9,padding:"9px 12px",border:`1px solid ${C.border}`}}>
             <div style={{fontFamily:"Arial,sans-serif",fontSize:9,color:C.muted,fontWeight:700,letterSpacing:1,textTransform:"uppercase",marginBottom:3}}>{k}</div>
             <div style={{fontFamily:"Arial,sans-serif",fontSize:12,color:C.ink}}>{v||"—"}</div>
@@ -553,7 +554,7 @@ function EnquiriesTab({enquiries,customers,users,onSelect,onStageChange,onDelete
       <div style={{overflowX:"auto",maxHeight:500,overflowY:"auto"}}>
         <table style={{width:"100%",borderCollapse:"collapse",fontFamily:"Arial,sans-serif",fontSize:12}}>
           <thead style={{position:"sticky",top:0,background:C.bg,zIndex:2}}>
-            <tr>{[["Customer Name","Customer"],["Product 1","Product"],["Country","Country"],["Assigned To","Assigned"],["Priority","Priority"],["Stage","Stage"],["Expected Value","Value"],["Expected Closure","Closure"],["Reminder Date","Reminder"]].map(([k,l])=>
+            <tr>{[["Enquiry Date","Date"],["Customer Name","Customer"],["Product 1","Product"],["Country","Country"],["Assigned To","Assigned"],["Priority","Priority"],["Stage","Stage"],["Expected Value","Value"],["Expected Closure","Closure"],["Reminder Date","Reminder"]].map(([k,l])=>
               <th key={k} onClick={()=>toggleSort(k)} style={{padding:"9px 13px",textAlign:"left",cursor:"pointer",color:sort.k===k?C.blue:C.muted,borderBottom:`1px solid ${C.border}`,fontWeight:700,letterSpacing:1,fontSize:9,textTransform:"uppercase",userSelect:"none",whiteSpace:"nowrap"}}>
                 {l}{sort.k===k?(sort.d===1?" ↑":" ↓"):""}
               </th>)}
@@ -569,6 +570,7 @@ function EnquiriesTab({enquiries,customers,users,onSelect,onStageChange,onDelete
               return <tr key={e.ID} onClick={()=>onSelect(e)} style={{background:overR?"#FFF8F8":closeS?"#FFFBF0":i%2===0?C.bg:"transparent",cursor:"pointer",transition:"background 0.12s"}}
                 onMouseEnter={ev=>ev.currentTarget.style.background=C.blueLt}
                 onMouseLeave={ev=>ev.currentTarget.style.background=overR?"#FFF8F8":closeS?"#FFFBF0":i%2===0?C.bg:"transparent"}>
+                <td style={{padding:"9px 13px",color:C.muted,whiteSpace:"nowrap"}}>{fmtDate(e["Enquiry Date"])||"—"}</td>
                 <td style={{padding:"9px 13px",color:C.ink,fontWeight:600,maxWidth:130,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e["Customer Name"]}</td>
                 <td style={{padding:"9px 13px",color:C.muted,maxWidth:150,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e["Product 1"]}{e["Product 2"]?`, ${e["Product 2"]}`:""}</td>
                 <td style={{padding:"9px 13px",color:C.muted}}>{e.Country||"—"}</td>
